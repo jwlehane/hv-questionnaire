@@ -1,0 +1,101 @@
+/* themes.css */
+
+/* 
+  Default Theme: Dark
+  This is the original theme of the application.
+*/
+body[data-theme="dark"] {
+    --bg-color: #0a0914;
+    --card-bg: #1a1829;
+    --text-color: #e0e0e0;
+    --text-muted: #9e9e9e;
+    --accent-color: #a55eea;
+    --primary-glow: #8e44ad;
+    --secondary-glow: #3498db;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --input-bg: var(--bg-color);
+    --button-text-color: white;
+    --link-secondary-bg-hover: rgba(255, 255, 255, 0.05);
+    --quote-bg: rgba(0,0,0,0.2);
+    --stepper-border: rgba(255, 255, 255, 0.2);
+    --stepper-active-bg: rgba(142, 68, 173, 0.1);
+    --certification-card-bg: linear-gradient(135deg, var(--card-bg) 0%, #2c2a4c 100%);
+}
+
+/* 
+  Theme 2: HV Light
+  A light-mode variant of the default theme.
+*/
+body[data-theme="light"] {
+    --bg-color: #f4f4f9;
+    --card-bg: #ffffff;
+    --text-color: #1c1c1e;
+    --text-muted: #6c757d;
+    --accent-color: #a55eea;
+    --primary-glow: #8e44ad;
+    --secondary-glow: #3498db;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --input-bg: #ffffff;
+    --button-text-color: white;
+    --link-secondary-bg-hover: rgba(0, 0, 0, 0.05);
+    --quote-bg: rgba(0,0,0,0.05);
+    --stepper-border: rgba(0, 0, 0, 0.2);
+    --stepper-active-bg: rgba(142, 68, 173, 0.1);
+    --certification-card-bg: linear-gradient(135deg, var(--card-bg) 0%, #e8eaf6 100%);
+}
+
+/* 
+  Theme 3: Venture Hub
+  A professional theme with blue and orange accents.
+*/
+body[data-theme="venture-hub"] {
+    --bg-color: #f8f9fa;
+    --card-bg: #ffffff;
+    --text-color: #212529;
+    --text-muted: #6c757d;
+    --accent-color: #0d6efd; /* A standard bootstrap blue */
+    --primary-glow: #0d6efd;
+    --secondary-glow: #fd7e14; /* A standard bootstrap orange */
+    --border-color: #dee2e6;
+    --input-bg: #ffffff;
+    --button-text-color: white;
+    --link-secondary-bg-hover: rgba(0, 0, 0, 0.05);
+    --quote-bg: #e9ecef;
+    --stepper-border: #dee2e6;
+    --stepper-active-bg: rgba(13, 110, 253, 0.1);
+    --certification-card-bg: linear-gradient(135deg, var(--card-bg) 0%, #e7f0ff 100%);
+}
+
+/* General styles that use the theme variables */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.nav-header, .nav-card, .response-card, #questionnaire-form-container, 
+.loading-state, .no-results-state, #log-container, #auth-required-message,
+.chart-card, .driver-card, .step-panel, .tab-content, .certification-card,
+#thank-you-message, .audit-log-grid {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+h1, h2.gradient-text, .percentage {
+    background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h3, .section-title, .nav-link:hover, #login-button, #submit-button, .link-primary,
+.tab-button.active, .consideration-item, .icon-item svg, #thank-you-message h2,
+#thank-you-message svg, .card-header h3 {
+    color: var(--accent-color);
+}
+
+p, .subtitle, .card-header p, .card-section p.answer, .card-section .answer-list,
+.nav-link, #user-email, .section-description, .input-field label, .driver-card .description,
+.consideration-item p, .step span, .tab-button, .icon-item p, .log-entry p {
+    color: var(--text-muted);
+}
+
+/* Add more general rules here to avoid repetition in every file */

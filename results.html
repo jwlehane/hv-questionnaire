@@ -330,7 +330,7 @@
                 const querySnapshot = await getDocs(q);
 
                 if (querySnapshot.empty) {
-                    auditLogDiv.innerHTML = '<p class="text-center text-slate-500">No login events found.</p>';
+                    auditLogDiv.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No login events found.</p>';
                 } else {
                     querySnapshot.forEach(doc => {
                         const log = doc.data();
@@ -342,7 +342,7 @@
                 }
             } catch (error) {
                 console.error("Error fetching audit log: ", error);
-                auditLogDiv.innerHTML = '<p class="text-center text-red-500">Could not load audit log.</p>';
+                auditLogDiv.innerHTML = '<p style="text-align: center; color: #e74c3c;">Could not load audit log.</p>';
             }
         }
 

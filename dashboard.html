@@ -135,16 +135,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyD70JX5kyoVCLpjlMyhSFqBlANImngCgEM",
-            authDomain: "ai-readiness-b1757.firebaseapp.com",
-            projectId: "ai-readiness-b1757",
-            storageBucket: "ai-readiness-b1757.firebasestorage.app",
-            messagingSenderId: "464552449431",
-            appId: "1:464552449431:web:3113b8104b567d7f4c60d2",
-            measurementId: "G-Q1RECJHSP0"
-        };
+        import { firebaseConfig } from './firebase-config.js';
         
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);

@@ -4,24 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HV CEO Peer Group | AI Readiness</title>
+    <link rel="stylesheet" href="themes.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
 
-        :root {
-            --dark-bg: #0a0914;
-            --card-bg: #1a1829;
-            --primary-glow: #8e44ad;
-            --secondary-glow: #3498db;
-            --text-color: #e0e0e0;
-            --text-muted: #9e9e9e;
-            --accent-color: #a55eea;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -29,6 +16,15 @@
             color: var(--text-color);
             line-height: 1.7;
             overflow-x: hidden;
+        }
+
+        .nav-header {
+            padding: 0 5%;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            height: 60px;
         }
 
         .container {
@@ -116,7 +112,11 @@
 
     </style>
 </head>
-<body>
+<body data-theme="dark">
+
+    <div class="nav-header">
+        <!-- Theme switcher will be injected here -->
+    </div>
 
     <div class="hero">
         <h1>AI Readiness Portal</h1>
@@ -124,7 +124,7 @@
 
     <div class="main-content container">
         <div class="nav-card">
-            <h2 style="font-size: 2rem; background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Hudson Valley CEO Peer Group</h2>
+            <h2 class="gradient-text" style="font-size: 2rem;">Hudson Valley CEO Peer Group</h2>
             <div class="nav-links">
                 <a href="/questionnaire.html" class="nav-link link-primary">Start Questionnaire</a>
                 <a href="/overview.html" class="nav-link link-secondary">AI Overview</a>
@@ -133,6 +133,15 @@
             </div>
         </div>
     </div>
+
+    <script type="module">
+        import { createThemeSwitcher, initializeTheme } from './theme-switcher.js';
+        
+        const navHeader = document.querySelector('.nav-header');
+        navHeader.appendChild(createThemeSwitcher());
+        
+        document.addEventListener('DOMContentLoaded', initializeTheme);
+    </script>
 
 </body>
 </html>
