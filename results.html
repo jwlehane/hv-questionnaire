@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Questionnaire Results | HV CEO Peer Group</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
+
+        :root {
+            --dark-bg: #0a0914;
+            --card-bg: #1a1829;
+            --primary-glow: #8e44ad;
+            --secondary-glow: #3498db;
+            --text-color: #e0e0e0;
+            --text-muted: #9e9e9e;
+            --accent-color: #a55eea;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.7;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 50px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 50px;
+        }
+
+        #auth-container button {
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: 1px solid var(--accent-color);
+            cursor: pointer;
+        }
+
+        #login-button {
+            background-color: var(--accent-color);
+            color: white;
+            box-shadow: 0 0 20px rgba(165, 94, 234, 0.5);
+        }
+        #login-button:hover { transform: translateY(-2px); }
+
+        #logout-button {
+            background: transparent;
+            color: var(--text-muted);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        #logout-button:hover { color: white; border-color: var(--accent-color); }
+
+        #user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        #user-email { color: var(--text-muted); font-size: 0.9rem; }
+
+        #results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .response-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .response-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .card-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .card-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+        }
+        .card-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .card-section {
+            margin-bottom: 15px;
+        }
+        .card-section p.question {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+        .card-section p.answer, .card-section .answer-list {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        .card-section .answer-list li {
+            margin-left: 20px;
+        }
+        .answer-quote {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .loading-state, .no-results-state {
+            text-align: center;
+            padding: 50px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hidden { display: none; }
+
+        .nav-header {
+            background: var(--card-bg);
+            padding: 0 5%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            height: 60px;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color);
+        }
+
+        .audit-log-grid {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .log-entry {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .log-entry:last-child { border-bottom: none; }
+
+    </style>
+</head>
+<body>
+    <div class="nav-header">
+        <a href="/main.html" class="nav-link">Home</a>
+    </div>
+
+    <div class="container">
+
+        <header>
+            <div>
+                <h1>AI Readiness Results</h1>
+                <p class="subtitle">Hudson Valley CEO Peer Group</p>
+            </div>
+            <div id="auth-container">
+                <button id="login-button">Sign In to View</button>
+                <div id="user-info" class="hidden">
+                    <p id="user-email"></p>
+                    <button id="logout-button" class="hidden">Sign Out</button>
+                </div>
+            </div>
+        </header>
+
+        <main id="main-content" class="hidden">
+            <div id="loading-state" class="loading-state">
+                <p>Loading responses...</p>
+            </div>
+            <div id="no-results-state" class="no-results-state hidden">
+                 <p>No responses have been submitted yet.</p>
+            </div>
+            <div id="results-grid"></div>
+        </main>
+
+        <div id="audit-log-container" class="hidden">
+            <h2 style="font-size: 2rem; text-align: center; margin-top: 80px; margin-bottom: 30px;">Recent Logins</h2>
+            <div id="audit-log" class="audit-log-grid">
+                <!-- Log entries will be injected here -->
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="/log.html" class="nav-link">View Full Log</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, query, getDocs, orderBy, addDoc, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { firebaseConfig } from './firebase-config.js';
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        const loginButton = document.getElementById('login-button');
+        const logoutButton = document.getElementById('logout-button');
+        const userInfo = document.getElementById('user-info');
+        const userEmail = document.getElementById('user-email');
+        const mainContent = document.getElementById('main-content');
+        const loadingState = document.getElementById('loading-state');
+        const noResultsState = document.getElementById('no-results-state');
+        const resultsGrid = document.getElementById('results-grid');
+
+        loginButton.addEventListener('click', () => signInWithPopup(auth, provider).catch(e => console.error("Login failed:", e)));
+        logoutButton.addEventListener('click', () => signOut(auth).catch(e => console.error("Logout failed:", e)));
+
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                loginButton.classList.add('hidden');
+                userInfo.classList.remove('hidden');
+                userEmail.textContent = user.email;
+                logoutButton.classList.remove('hidden');
+                mainContent.classList.remove('hidden');
+                logLogin(user.email);
+                fetchResults();
+                fetchAuditLog();
+            } else {
+                loginButton.classList.remove('hidden');
+                userInfo.classList.add('hidden');
+                userEmail.textContent = '';
+                logoutButton.classList.add('hidden');
+                mainContent.classList.add('hidden');
+                document.getElementById('audit-log-container').classList.add('hidden');
+                resultsGrid.innerHTML = '';
+            }
+        });
+
+        async function fetchResults() {
+            loadingState.classList.remove('hidden');
+            noResultsState.classList.add('hidden');
+            resultsGrid.innerHTML = '';
+
+            try {
+                const q = query(collection(db, "ai-questionnaire-responses"), orderBy("submittedAt", "desc"));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    noResultsState.classList.remove('hidden');
+                } else {
+                    querySnapshot.forEach(doc => {
+                        const card = createResponseCard(doc.data());
+                        resultsGrid.appendChild(card);
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching results: ", error);
+                resultsGrid.innerHTML = `<div class="no-results-state"><p>Could not load results. Check console for errors.</p></div>`;
+            } finally {
+                loadingState.classList.add('hidden');
+            }
+        }
+
+        async function logLogin(userEmail) {
+            try {
+                await addDoc(collection(db, "login-audit-log"), {
+                    email: userEmail,
+                    timestamp: serverTimestamp()
+                });
+            } catch (error) {
+                console.error("Error logging login: ", error);
+            }
+        }
+
+        async function fetchAuditLog() {
+            const auditLogContainer = document.getElementById('audit-log-container');
+            const auditLogDiv = document.getElementById('audit-log');
+            auditLogContainer.classList.remove('hidden');
+            auditLogDiv.innerHTML = '';
+
+            try {
+                const q = query(collection(db, "login-audit-log"), orderBy("timestamp", "desc"), limit(10));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    auditLogDiv.innerHTML = '<p class="text-center text-slate-500">No login events found.</p>';
+                } else {
+                    querySnapshot.forEach(doc => {
+                        const log = doc.data();
+                        const logEntry = document.createElement('div');
+                        logEntry.className = 'log-entry';
+                        logEntry.innerHTML = `<p><strong>${log.email}</strong> logged in at ${log.timestamp ? new Date(log.timestamp.seconds * 1000).toLocaleString() : 'Pending...'}</p>`;
+                        auditLogDiv.appendChild(logEntry);
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching audit log: ", error);
+                auditLogDiv.innerHTML = '<p class="text-center text-red-500">Could not load audit log.</p>';
+            }
+        }
+
+        function createResponseCard(data) {
+            const card = document.createElement('div');
+            card.className = 'response-card';
+            
+            const barriersList = data.barriers && data.barriers.length > 0 
+                ? `<ul>${data.barriers.map(b => `<li>${b}</li>`).join('')}</ul>` 
+                : '<p class="answer">N/A</p>';
+            const otherBarrier = data.barrierOtherText ? `<p class="answer-quote"><em>${data.barrierOtherText}</em></p>` : '';
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <h3>${data.name || 'No Name'}</h3>
+                    <p>${data.company || 'No Company'}</p>
+                    <p style="font-size: 0.8rem; opacity: 0.6;">Submitted: ${data.submittedAt ? new Date(data.submittedAt.seconds * 1000).toLocaleString() : 'N/A'}</p>
+                </div>
+                <div class="card-body">
+                    <div class="card-section">
+                        <p class="question">1. Current AI Usage Type:</p>
+                        <p class="answer">${data.aiUsageType || 'N/A'}</p>
+                        ${data.usageExample ? `<p class="answer-quote"><em>${data.usageExample}</em></p>` : ''}
+                    </div>
+                    <div class="card-section">
+                        <p class="question">2. Scale of Adoption:</p>
+                        <p class="answer"><strong>${data.aiUserCount || 0} of ${data.employeeCount || 'N/A'}</strong> employees using AI.</p>
+                        ${data.commonTools ? `<p class="answer-quote"><em>Tools: ${data.commonTools}</em></p>` : ''}
+                    </div>
+                    <div class="card-section">
+                        <p class="question">3. Biggest Barriers:</p>
+                        <div class="answer-list">${barriersList}</div>
+                        ${otherBarrier}
+                    </div>
+                    <div class="card-section">
+                        <p class="question">4. AI 'Crystal Ball' Question:</p>
+                        <p class="answer-quote">${data.aiCrystalBall || 'N/A'}</p>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+    </script>
+</body>
+</html>

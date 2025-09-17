@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Audit Log | HV CEO Peer Group</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
+
+        :root {
+            --dark-bg: #0a0914;
+            --card-bg: #1a1829;
+            --primary-glow: #8e44ad;
+            --secondary-glow: #3498db;
+            --text-color: #e0e0e0;
+            --text-muted: #9e9e9e;
+            --accent-color: #a55eea;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.7;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 50px;
+        }
+
+        #log-container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .log-entry {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .log-entry:last-child { border-bottom: none; }
+
+        .loading-state, .no-results-state {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .hidden { display: none; }
+
+        .nav-header {
+            background: var(--card-bg);
+            padding: 0 5%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            height: 60px;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="nav-header">
+        <a href="/main.html" class="nav-link">Home</a>
+        <a href="/results.html" class="nav-link" style="margin-left: auto;">Back to Results</a>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Login Audit Log</h1>
+            <p class="subtitle">Full login history for the results page.</p>
+        </header>
+
+        <main id="main-content" class="hidden">
+            <div id="loading-state" class="loading-state">
+                <p>Loading log...</p>
+            </div>
+            <div id="no-results-state" class="no-results-state hidden">
+                 <p>No login events found.</p>
+            </div>
+            <div id="log-container">
+                <!-- Log entries will be injected here -->
+            </div>
+        </main>
+
+        <div id="auth-required-message" class="text-center" style="padding: 50px; background: var(--card-bg); border-radius: 15px;">
+            <p>You must be logged in to view this page.</p>
+            <a href="/results.html" style="color: var(--accent-color); display: inline-block; margin-top: 20px;">Login on Results Page</a>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebase/auth.js";
+        import { getFirestore, collection, query, getDocs, orderBy, addDoc, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { firebaseConfig } from './firebase-config.js';
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const mainContent = document.getElementById('main-content');
+        const authRequiredMessage = document.getElementById('auth-required-message');
+        const loadingState = document.getElementById('loading-state');
+        const noResultsState = document.getElementById('no-results-state');
+        const logContainer = document.getElementById('log-container');
+
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                mainContent.classList.remove('hidden');
+                authRequiredMessage.classList.add('hidden');
+                fetchFullLog();
+            } else {
+                mainContent.classList.add('hidden');
+                authRequiredMessage.classList.remove('hidden');
+            }
+        });
+
+        async function fetchFullLog() {
+            loadingState.classList.remove('hidden');
+            noResultsState.classList.add('hidden');
+            logContainer.innerHTML = '';
+
+            try {
+                const q = query(collection(db, "login-audit-log"), orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    noResultsState.classList.remove('hidden');
+                } else {
+                    querySnapshot.forEach(doc => {
+                        const log = doc.data();
+                        const logEntry = document.createElement('div');
+                        logEntry.className = 'log-entry';
+                        logEntry.innerHTML = `<p><strong>${log.email}</strong> logged in at ${log.timestamp ? new Date(log.timestamp.seconds * 1000).toLocaleString() : 'Pending...'}</p>`;
+                        logContainer.appendChild(logEntry);
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching full log: ", error);
+                logContainer.innerHTML = '<p class="text-center text-red-500">Could not load full log.</p>';
+            } finally {
+                loadingState.classList.add('hidden');
+            }
+        }
+
+    </script>
+</body>
+</html>

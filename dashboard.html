@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results Dashboard | HV CEO Peer Group</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
+
+        :root {
+            --dark-bg: #0a0914;
+            --card-bg: #1a1829;
+            --primary-glow: #8e44ad;
+            --secondary-glow: #3498db;
+            --text-color: #e0e0e0;
+            --text-muted: #9e9e9e;
+            --accent-color: #a55eea;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.7;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 50px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chart-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        .hidden { display: none; }
+
+        .nav-header {
+            background: var(--card-bg);
+            padding: 0 5%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            height: 60px;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="nav-header">
+        <a href="/main.html" class="nav-link">Home</a>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Results Dashboard</h1>
+            <p class="subtitle">Aggregated data from the AI Readiness Questionnaire.</p>
+        </header>
+
+        <main id="main-content" class="hidden">
+            <div class="dashboard-grid">
+                <div class="chart-card">
+                    <h2>AI Usage Type</h2>
+                    <canvas id="aiUsageChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h2>Barriers to Adoption</h2>
+                    <canvas id="barriersChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h2>AI Crystal Ball Questions</h2>
+                    <ul id="crystalBallList"></ul>
+                </div>
+            </div>
+        </main>
+
+        <div id="auth-required-message" class="text-center" style="padding: 50px; background: var(--card-bg); border-radius: 15px;">
+            <p>You must be logged in to view this page.</p>
+            <a href="/results.html" style="color: var(--accent-color); display: inline-block; margin-top: 20px;">Login on Results Page</a>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD70JX5kyoVCLpjlMyhSFqBlANImngCgEM",
+            authDomain: "ai-readiness-b1757.firebaseapp.com",
+            projectId: "ai-readiness-b1757",
+            storageBucket: "ai-readiness-b1757.firebasestorage.app",
+            messagingSenderId: "464552449431",
+            appId: "1:464552449431:web:3113b8104b567d7f4c60d2",
+            measurementId: "G-Q1RECJHSP0"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const mainContent = document.getElementById('main-content');
+        const authRequiredMessage = document.getElementById('auth-required-message');
+
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                mainContent.classList.remove('hidden');
+                authRequiredMessage.classList.add('hidden');
+                loadDashboardData();
+            } else {
+                mainContent.classList.add('hidden');
+                authRequiredMessage.classList.remove('hidden');
+            }
+        });
+
+        async function loadDashboardData() {
+            const querySnapshot = await getDocs(collection(db, "ai-questionnaire-responses"));
+            const responses = querySnapshot.docs.map(doc => doc.data());
+
+            // Process data for charts
+            const aiUsage = responses.reduce((acc, curr) => {
+                acc[curr.aiUsageType] = (acc[curr.aiUsageType] || 0) + 1;
+                return acc;
+            }, {});
+
+            const barriers = responses.reduce((acc, curr) => {
+                curr.barriers.forEach(barrier => {
+                    acc[barrier] = (acc[barrier] || 0) + 1;
+                });
+                return acc;
+            }, {});
+
+            const crystalBallQuestions = responses.map(r => r.aiCrystalBall).filter(q => q);
+
+            // Render charts
+            renderAiUsageChart(aiUsage);
+            renderBarriersChart(barriers);
+            renderCrystalBallList(crystalBallQuestions);
+        }
+
+        function renderAiUsageChart(data) {
+            const ctx = document.getElementById('aiUsageChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        data: Object.values(data),
+                        backgroundColor: ['#8e44ad', '#3498db', '#95a5a6']
+                    }]
+                }
+            });
+        }
+
+        function renderBarriersChart(data) {
+            const ctx = document.getElementById('barriersChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        label: 'Frequency',
+                        data: Object.values(data),
+                        backgroundColor: '#a55eea'
+                    }]
+                },
+                options: {
+                    indexAxis: 'y'
+                }
+            });
+        }
+
+        function renderCrystalBallList(questions) {
+            const list = document.getElementById('crystalBallList');
+            list.innerHTML = questions.map(q => `<li>${q}</li>`).join('');
+        }
+
+    </script>
+</body>
+</html>
