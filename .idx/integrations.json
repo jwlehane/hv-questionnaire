@@ -1,5 +1,6 @@
 {
   "firebase_hosting": {
     "deploymentHostingUrl": "https://ai-readiness-b1757.web.app"
-  }
+  },
+  "secrets_manager": {}
 }

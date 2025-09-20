@@ -12,8 +12,6 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-color);
             line-height: 1.7;
             overflow-x: hidden;
         }
@@ -61,15 +59,6 @@
             z-index: 10;
         }
 
-        .nav-card {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
-
         .nav-links {
             display: flex;
             flex-direction: column;
@@ -101,12 +90,11 @@
 
         .link-secondary {
             background: transparent;
-            color: var(--text-muted);
-            border-color: rgba(255, 255, 255, 0.2);
+            border-color: var(--border-color);
         }
         .link-secondary:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-            color: white;
+            background-color: var(--link-secondary-bg-hover);
+            color: var(--text-color);
             border-color: var(--accent-color);
         }
 
@@ -128,6 +116,7 @@
             <div class="nav-links">
                 <a href="/questionnaire.html" class="nav-link link-primary">Start Questionnaire</a>
                 <a href="/overview.html" class="nav-link link-secondary">AI Overview</a>
+                <a href="/gen-ai-for-small-business.html" class="nav-link link-secondary">Gen AI for Small Business</a>
                 <a href="/results.html" class="nav-link link-secondary">View Results</a>
                 <a href="/dashboard.html" class="nav-link link-secondary">View Dashboard</a>
             </div>
@@ -135,7 +124,7 @@
     </div>
 
     <script type="module">
-        import { createThemeSwitcher, initializeTheme } from './theme-switcher.js';
+        import { createThemeSwitcher, initializeTheme } from '/theme-switcher.js';
         
         const navHeader = document.querySelector('.nav-header');
         navHeader.appendChild(createThemeSwitcher());

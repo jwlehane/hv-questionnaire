@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gen AI for Small Business</title>
+    <link rel="stylesheet" href="themes.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 20px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .container.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; letter-spacing: 1px; }
+
+        h2 {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        h4 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        .section-intro {
+            text-align: center;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 60px auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, rgba(142, 68, 173, 0.1), transparent 70%);
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+        }
+
+        .content-section {
+            margin-bottom: 80px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: var(--stepper-active-bg);
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(142, 68, 173, 0.2);
+        }
+
+        .card ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .card li {
+            margin-bottom: 10px;
+            color: var(--text-muted);
+        }
+
+        .card li strong {
+            color: var(--text-color);
+        }
+
+        .key-takeaway {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .key-takeaway p {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        
+        .key-takeaway strong {
+            color: var(--accent-color);
+        }
+
+        .nav-header {
+            padding: 0 5%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            height: 60px;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color);
+        }
+
+    </style>
+</head>
+<body data-theme="dark">
+    <div class="nav-header">
+        <a href="/main.html" class="nav-link">Home</a>
+        <!-- Theme switcher will be injected here -->
+    </div>
+
+    <div class="hero container is-visible">
+        <h1>Gen AI for Small Business:<br>Boosting Efficiency & Innovation</h1>
+    </div>
+
+    <div class="container">
+        <div class="content-section">
+            <h2>Gen AI: Beyond the Chatbot</h2>
+            <p class="section-intro">Gen AI is more than just chatbots. It's about fundamental tools that can revolutionize daily operations.</p>
+            <div class="grid">
+                <div class="card">
+                    <h4>Summarize</h4>
+                    <p>Condense large amounts of information quickly.</p>
+                </div>
+                <div class="card">
+                    <h4>Create</h4>
+                    <p>Generate new content, from marketing copy to ideas.</p>
+                </div>
+                <div class="card">
+                    <h4>Discover</h4>
+                    <p>Find crucial information precisely when you need it.</p>
+                </div>
+                <div class="card">
+                    <h4>Automate</h4>
+                    <p>Turn previously manual tasks into automated workflows.</p>
+                </div>
+            </div>
+            <div class="key-takeaway">
+                <p><strong>Key takeaway:</strong> Think beyond just chat; think about how AI can save you time and spark new ideas across your entire business.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Planning Your AI Projects</h2>
+            <p class="section-intro">Thoughtful planning ensures your AI projects deliver real value, matching your specific business needs and available resources.</p>
+            <div class="grid">
+                <div class="card">
+                    <h4>Your Needs</h4>
+                    <ul>
+                        <li><strong>Users:</strong> How many users will it serve?</li>
+                        <li><strong>Customization:</strong> How customized does it need to be?</li>
+                        <li><strong>Data:</strong> How sensitive is your data?</li>
+                        <li><strong>Response Time:</strong> What response time do you expect?</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Your Resources</h4>
+                    <ul>
+                        <li><strong>People:</strong> Do you have the right people?</li>
+                        <li><strong>Money:</strong> What is your budget?</li>
+                        <li><strong>Time:</strong> What is the timeline for the project?</li>
+                    </ul>
+                </div>
+            </div>
+             <div class="key-takeaway">
+                <p><strong>Key takeaway:</strong> You don't need to build models from scratch. Leverage existing, powerful models and focus on planning.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Practical Applications: Apps & Agents</h2>
+            <p class="section-intro">AI apps and agents offer powerful, actionable ways to improve almost every aspect of your business.</p>
+            
+            <h3>Gen AI Apps: Immediate Productivity Boosts</h3>
+            <div class="grid">
+                <div class="card">
+                    <h4>Research Assistant</h4>
+                    <p>Upload your files, and AI can summarize key points, answer questions, and generate ideas, staying grounded in your source material.</p>
+                </div>
+                <div class="card">
+                    <h4>Smarter Interactions</h4>
+                    <p>Learn to guide AI effectively with good prompts, examples (few-shot), and by assigning it a "role".</p>
+                </div>
+                <div class="card">
+                    <h4>Reliable Information</h4>
+                    <p>Connect AI to your verifiable sources so it doesn't "make things up". This ensures its output is accurate and trustworthy.</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 60px;">Gen AI Agents: Your New "Smart" Team Members</h3>
+            <div class="grid">
+                <div class="card">
+                    <h4>Customer Service</h4>
+                    <p>Act as effective chatbots, assist human agents, and gain insights from customer communications.</p>
+                </div>
+                <div class="card">
+                    <h4>Marketing</h4>
+                    <p>Plan campaigns, generate tailored content, and analyze customer data for engagement.</p>
+                </div>
+                <div class="card">
+                    <h4>Sales</h4>
+                    <p>Shorten sales cycles by finding customer info, automating admin, and suggesting next steps.</p>
+                </div>
+                 <div class="card">
+                    <h4>HR</h4>
+                    <p>Simplify onboarding and other workflows (e.g., creating learning plans, identifying confusion areas).</p>
+                </div>
+                 <div class="card">
+                    <h4>Idea Generation</h4>
+                    <p>Brainstorm and refine innovative ideas in minutes.</p>
+                </div>
+                 <div class="card">
+                    <h4>Build Your Own</h4>
+                    <p>Create or adapt agents for specific, job-related tasks, empowering your employees.</p>
+                </div>
+            </div>
+             <div class="key-takeaway">
+                <p><strong>Key takeaway:</strong> Agents can execute complex workflows and act on your behalf, reducing manual tasks and freeing up employee time.</p>
+            </div>
+        </div>
+
+        <div class="content-section" style="text-align: center;">
+            <h2>Ready to Innovate?</h2>
+            <p class="section-intro">Think about the "problems you walk by every day" that AI could solve or improve. Now, let's see how quickly we can leverage AI Code Assistance to create a dynamic webpage from this very outline!</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createThemeSwitcher, initializeTheme } from '/theme-switcher.js';
+        
+        const navHeader = document.querySelector('.nav-header');
+        navHeader.appendChild(createThemeSwitcher());
+        
+        document.addEventListener('DOMContentLoaded', initializeTheme);
+    </script>
+    <script>
+        // --- Scroll Animation ---
+        const sections = document.querySelectorAll('.container');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
