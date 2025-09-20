@@ -1,0 +1,31 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "This project is a web application designed to assess and visualize the AI readiness of companies within the Hudson Valley CEO Peer Group. It includes a questionnaire for data collection, a dashboard for aggregated results, and an overview of strategic AI implementation.",
+  "main": "theme-switcher.js",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwlehane/hv-questionnaire.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "bugs": {
+    "url": "https://github.com/jwlehane/hv-questionnaire/issues"
+  },
+  "homepage": "https://github.com/jwlehane/hv-questionnaire#readme",
+  "devDependencies": {
+    "jest": "^30.1.3",
+    "jest-environment-jsdom": "^30.1.2"
+  },
+  "dependencies": {
+    "firebase": "^12.3.0"
+  }
+}
